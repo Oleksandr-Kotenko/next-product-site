@@ -1,21 +1,43 @@
-import { Product, ProductListPageOptions } from '@type/products';
+import { Product, ProductListPageOptions, ProductListQueryData } from '@type/products';
+import { getDbCLient } from '@utils/dbCLient';
+import type { PrismaClient } from '@prisma/client';
 
-import productsSmallData from '../../mock/small/products.json';
-import productsLargeData from '../../mock/large/products.json';
-
-let products: Product[] = [...productsSmallData, ...productsLargeData];
-
-export function getProductById(id: string) {
-  return products.find((product) => product.id === id);
+export async function getProductById(id: string) {
+  const dbCLient: PrismaClient = await getDbCLient();
+  const product = await dbCLient.product.findUnique({
+    where: {
+      id,
+    },
+  });
+  return product;
 }
 
-export function getProductsList(pageOptions: ProductListPageOptions) {
-  const { pageNumber, limit } = pageOptions;
-  const offset = (pageNumber - 1) * limit;
+export async function getProductsList(pageOptions: ProductListPageOptions, filterOptions: ProductListQueryData) {
+  const { page, limit = 20 } = pageOptions;
+  const { category, search } = filterOptions;
+  const offset = (page - 1) * limit;
   console.log(`${offset} : ${limit}`);
-  const data = products.slice(offset, offset + limit);
+
+  const where = {
+    ...(search && { name: { startsWith: search } }),
+    ...(category && { category }),
+  };
+
+  const dbCLient: PrismaClient = await getDbCLient();
+  const data = await dbCLient.product.findMany({
+    take: limit,
+    skip: offset,
+    where,
+  });
+
+  const count = await dbCLient.product.count({ where });
+
   return {
     data,
-    count: products.length,
+    pagination: {
+      totalCount: count,
+      pageCount: (count % limit) + 1,
+      page,
+    },
   };
 }

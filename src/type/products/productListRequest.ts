@@ -1,4 +1,11 @@
 export type ProductListPageOptions = {
-  pageNumber: number;
-  limit: number;
+  page: number;
+  limit?: number;
 };
+
+export type ProductListQueryData = {
+  category?: string;
+  search?: string;
+};
+
+export type ProductQueryParams = ProductListQueryData & ProductListPageOptions;
