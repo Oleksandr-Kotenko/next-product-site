@@ -2,11 +2,36 @@ import { useFilter } from '@context/products';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 
+//just for test purposes
+const categories = [
+  'Electronics',
+  'Jewelery',
+  'Games',
+  'Books',
+  'Toys',
+  'Health',
+  'Automotive',
+  'Sports',
+  'Grocery',
+  'Computers',
+  'Baby',
+  'Kids',
+  'Beauty',
+  'Outdoors',
+  'Music',
+  'Garden',
+  'Industrial',
+  'Shoes',
+  'Home',
+  'Movies',
+  'Clothing',
+  'Tools',
+];
+
 const FilterBar = () => {
   const { categoryFilter, setCategoryFilter, searchFilter, setSearchFilter, applyFilters } = useFilter();
 
   const [searchInput, setSearchInput] = useState<string>(searchFilter);
-  const categories = ['Automotive', 'Tools'];
 
   const debouncedSearch = debounce((value: string) => {
     setSearchFilter(value);

@@ -4,12 +4,14 @@ import { getDbCLient } from '@utils/dbCLient';
 import type { PrismaClient } from '@prisma/client';
 
 export async function getProductById(id: string) {
-  const dbCLient: PrismaClient = await getDbCLient();
-  const product = await dbCLient.product.findUnique({
+  const dbClient: PrismaClient = await getDbCLient();
+
+  const product = await dbClient.product.findUnique({
     where: {
       id,
     },
   });
+
   return product;
 }
 
@@ -17,21 +19,20 @@ export async function getProductsList(pageOptions: ProductListPageOptions, filte
   const { page, limit = 20 } = pageOptions;
   const { category, search } = filterOptions;
   const offset = (page - 1) * limit;
-  console.log(`${offset} : ${limit}`);
 
   const where = {
     ...(search && { name: { startsWith: search } }),
     ...(category && { category }),
   };
 
-  const dbCLient: PrismaClient = await getDbCLient();
-  const data = await dbCLient.product.findMany({
+  const dbClient: PrismaClient = await getDbCLient();
+  const data = await dbClient.product.findMany({
     take: limit,
     skip: offset,
     where,
   });
 
-  const count = await dbCLient.product.count({ where });
+  const count = await dbClient.product.count({ where });
 
   return {
     data,
