@@ -10,7 +10,7 @@ const FilterBar = () => {
 
   const debouncedSearch = debounce((value: string) => {
     setSearchFilter(value);
-  }, 300);
+  }, 700);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -22,13 +22,13 @@ const FilterBar = () => {
     if (searchFilter !== searchInput) {
       setSearchInput(searchFilter);
     }
-  }, [searchFilter, searchInput]);
+  }, []);
 
   useEffect(() => {
     return () => {
       debouncedSearch.cancel();
     };
-  }, [debouncedSearch]);
+  }, []);
 
   return (
     <div className='p-4 bg-gray-800 rounded-lg shadow-lg'>

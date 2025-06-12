@@ -1,4 +1,5 @@
-import { Product, ProductListPageOptions, ProductListQueryData } from '@type/products';
+import { cache } from 'react';
+import { ProductListPageOptions, ProductListQueryData } from '@type/products';
 import { getDbCLient } from '@utils/dbCLient';
 import type { PrismaClient } from '@prisma/client';
 
@@ -36,8 +37,13 @@ export async function getProductsList(pageOptions: ProductListPageOptions, filte
     data,
     pagination: {
       totalCount: count,
-      pageCount: (count % limit) + 1,
+      pageCount: Math.ceil(count / limit),
       page,
     },
   };
 }
+
+export const getProductFromStore = cache(async (id: string) => {
+  const product = await getProductById(id);
+  return product;
+});
