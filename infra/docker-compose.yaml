@@ -21,10 +21,10 @@ services:
       target: dev # Use the dev stage for local development
     expose:
       - '3000'
+    ports:
+      - '3000:3000'
     environment:
       NODE_ENV: development
-      PORT: 3000
-      HUSKY: 0
     env_file:
       - ../.env
     depends_on:

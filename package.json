@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev-prisma": "prisma generate && pnpm sync-db && pnpm seed && next dev",
+    "dev-prisma": "pnpm prisma:generate && pnpm sync-db && next dev",
     "lint": "next lint",
     "start": "next start",
     "build": "next build",
@@ -17,7 +17,8 @@
     "generate-large-data": "node ./scripts/generateLargeData.js",
     "generate-small-data": "node ./scripts/generateSmallData.js",
     "seed": "node prisma/seed.mjs",
-    "sync-db": "prisma db push --accept-data-loss --force-reset"
+    "sync-db": "prisma db push --accept-data-loss --force-reset",
+    "prisma:generate": "prisma generate"
   },
   "engines": {
     "node": ">=18",
