@@ -1,5 +1,5 @@
 import { useFilter } from '@context/products';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState, useMemo } from 'react';
 import { debounce } from 'lodash';
 
 //just for test purposes
@@ -33,27 +33,15 @@ const FilterBar = () => {
 
   const [searchInput, setSearchInput] = useState<string>(searchFilter);
 
-  const debouncedSearch = debounce((value: string) => {
-    setSearchFilter(value);
-  }, 700);
+  const debouncedSearch = useMemo(() => {
+    return debounce((value: string) => setSearchFilter(value), 700);
+  }, []);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchInput(value);
     debouncedSearch(value);
   };
-
-  useEffect(() => {
-    if (searchFilter !== searchInput) {
-      setSearchInput(searchFilter);
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, []);
 
   return (
     <div className='p-4 bg-gray-800 rounded-lg shadow-lg'>

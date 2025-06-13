@@ -4,6 +4,7 @@ import { httpFetch } from '@utils/httpFetch';
 import { buildQueryParams } from '@utils/buildQueryParams';
 import { CustomResponse, Pagination } from '@type/common';
 import { ProductQueryParams } from '@type/products';
+import { removeEmptyProperties } from '@utils/removeEmptyProperties';
 
 /**
  * Retrieves a list of products based on the provided query data.
@@ -26,7 +27,7 @@ import { ProductQueryParams } from '@type/products';
  * // }
  */
 export const useFetchProducts = (productQueryData: ProductQueryParams): CustomResponse<Product[]> => {
-  const params = buildQueryParams(productQueryData);
+  const params = buildQueryParams(removeEmptyProperties(productQueryData));
 
   const url = `/products?${params.toString()}`;
   const { data, isLoading, error } = useSWR<{ data: Product[]; pagination: Pagination }>(url, httpFetch);
