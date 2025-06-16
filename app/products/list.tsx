@@ -21,7 +21,7 @@ const ProductList: React.FC = () => {
   }, [currentPage]);
 
   const handlePageClick = ({ selected }: { selected: number }) => {
-    setCurrentPage(selected);
+    setCurrentPage(selected + 1); // react-paginate uses indexes from 0. Issue #167
   };
 
   if (isLoading) return <Loading />;
@@ -63,7 +63,7 @@ const ProductList: React.FC = () => {
           pageCount={pagination!.pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={3}
-          initialPage={currentPage}
+          forcePage={currentPage - 1} // component uses zero index
           onPageChange={handlePageClick}
           breakClassName={'break-me'}
           containerClassName={'flex justify-center items-center space-x-2 mt-4'}
