@@ -1,3 +1,5 @@
+import { RangeOfValues } from '@type/products';
+
 /**
  * Constructs a URLSearchParams object based on the given query data and returns it.
  *
@@ -12,4 +14,23 @@ export const buildQueryParams = (queryData: Record<string, any>): URLSearchParam
   }
 
   return params;
+};
+
+export const parseNumberRange = (range: string | null): RangeOfValues<number> | null => {
+  if (!range) {
+    return null;
+  }
+
+  const [min, max] = range.split('-').map((value) => parseFloat(value));
+  const minNotNaN = !isNaN(min);
+  const maxNotNaN = !isNaN(max);
+
+  if (!minNotNaN && !maxNotNaN) {
+    return null;
+  }
+
+  return {
+    ...(minNotNaN && { from: min }),
+    ...(maxNotNaN && { to: max }),
+  };
 };

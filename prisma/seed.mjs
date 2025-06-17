@@ -22,6 +22,7 @@ async function main() {
       data: {
         ...product,
         category: product.category,
+        price: parseFloat(product.price),
       },
     });
     seedCount++;
